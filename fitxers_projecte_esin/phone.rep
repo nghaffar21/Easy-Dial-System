@@ -1,0 +1,7 @@
+string _name; //indica el nom del phone
+nat _num; //indica el numero del phone
+nat _compt; //indica la frequencia del phone
+
+
+
+

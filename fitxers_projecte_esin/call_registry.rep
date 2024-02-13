@@ -1,0 +1,145 @@
+/* hem escollit la estructura d'un AVL degut a que els costos de inserció, eliminació 
+i consulta son tots logaritmics o inferiors, complint així els requisits de l'enunciat.
+Hem ordenat l'AVL en funció dels números de telèfon degut a que els métodes demanaven
+informació sorbe els números de telèfon.
+No hem escollit taules de dispersió degut a que a l'hora de fer la redisperció el cost
+seria lineal, incomplint els requisits de l'enunciat. 
+Tampoc hem escollit BST degut a que en els pitjors casos els costos de les operacions
+poden arribar a ser lineals. 
+*/
+
+struct node {
+	   phone _p;      //Clau
+       node* _esq;   //fill esquerre
+       node* _dret;  //fill dret
+       nat _h;       //Altura del subarbre
+};
+
+node *_arrel; //arrel de l'arbre
+     
+nat _size; //número de nodes de l'arbre
+     
+
+
+/* PRE: c apunta a l'arrel de l'arbre a copiar.
+POST: copia el AVL c en el parametre implícit.
+Cost Temporal: O(n), on n es el número de nodes de l'arbre. */
+node* copiar_arbre(node* c);
+
+
+
+/* PRE: Cert.
+POST: esborra tots els nodes de l'AVL.
+Cost Temporal: O(n), on n es el número de nodes de l'arbre. */
+void esborra_nodes(node* m);
+
+
+/* PRE: ptr apunta a l'arrel del AVL.
+POST: Incrementa en 1 el comptador de trucades del telefon amb número num de l'AVL.
+Si el número no estava prèviament en l'AVL afegeix una nova entrada amb 
+el número num, l'string buit com a nom i el comptador a 1 i balanceja l'AVL.
+Cost Temporal : O(log n), on n es el número de nodes de l'arbre. */
+node* registra_trucada(nat num, node* ptr) throw(error); //hace falta error aqui?
+
+
+/* PRE: Cert.
+POST: Fa una rotacio del AVL cap a la dreta.
+Cost Temporal : O(1) */
+node* rotacio_dreta(node *y);
+
+
+/* PRE: Cert.
+POST: Fa una rotacio del AVL cap a l'esquerra.
+Cost Temporal : O(1) */
+node* rotacio_esquerra(node *x);
+
+
+/* PRE: Cert.
+POST: Retorna la diferencia d'altura entre el fill esquerre i el fill dret del node n.
+Cost Temporal : O(1) */
+int factor_equilibri(node *n);
+
+
+/* PRE: Cert.
+POST: Retorna la altura del node n.
+Cost Temporal : O(1) */
+int altura(node *n);
+
+
+/* PRE: ptr apunta a l'arrel de l'AVL.
+POST: Assigna el nom name al número num dins de l'AVL. Si el num no estaba dins de
+l'AVL, s'afegeix una nova entrada en l'AVL amb el número i nom donats, i el comptador 
+de trucades a 0 i balanceja l'AVL. Si el num existia prèviament en l'AVL,
+se li assigna el nom name.
+Cost Temporal: O(log n), on n es el número de nodes de l'arbre. */
+node* assigna_nom(nat num, const string& name, node* ptr) throw(error);
+
+
+/* PRE: ptr apunta a l'arrel de l'AVL..
+POST: Elimina el número num del AVL i balanceja l'AVL.
+Es produeix un error si num no està dins de l'AVL.
+Cost Temporal: O(log n), on n es el número de nodes de l'arbre. */
+node* elimina(nat num, node* ptr) throw(error);
+
+
+/* PRE: Cert.
+POST: Ajunta dos AVLs, si un dels dos és buit el resultat és
+l’altre.
+Cost Temporal: O(h), on h és l'altura de l'arbre t1. En el pitjor cas, això pot ser O(log n) si t1
+és un subarbre equilibrat, on n és el nombre de nodes en t1. */
+node* ajunta(node *t1 , node *t2) throw();
+
+
+/* Aquest mètode rep un apuntador a l’arrel d’un AVL i ens retorna l’apuntador a l'element amb el phone amb el número més gran del AVL.
+PRE: Cert.
+POST: L’arrel del nou BST és l’element màxim del AVL antic. En el nou AVL el subarbre
+dret és NULL i l’esquerre és el AVL que s’obté d’eliminar l’element màxim.
+Cost Temporal: O(h), on h és l'altura de l'arbre representat per p. Això és típicament O(log n) per a un subarbre
+equilibrat AVL, on n és el nombre de nodes en el subarbre. */
+node* elimina_maxim(node *p) throw();
+
+
+/* PRE: ptr apunta a l'arrel de l'AVL.
+POST: Fa un recorregut sobre l'AVL i retorna cert si i només si l'AVL conté un 
+telèfon amb el número donat. 
+Cost Temporal: O(log n), on n es el número de nodes de l'arbre. */
+bool conte(nat num, node *ptr) const throw();
+
+
+/* PRE: ptr apunta a l'arrel de l'AVL.
+POST: Fa un recorregut sorbe l'AVL i retorna el nom del num, Es produeix un error si 
+el número no està en el call_registry.
+Cost Temporal: O(log n), on n es el número de nodes de l'arbre. */
+string nom(nat num, node *ptr) const throw(error);
+
+
+/* PRE: ptr apunta a l'arrel de l'AVL.
+POST: Fa un recorregut sorbe l'AVL i retorna la frequencia del num, Es produeix un error
+si el número no està en el call_registry.
+Cost Temporal: O(log n), on n es el número de nodes de l'arbre. */
+nat num_trucades(nat num, node *ptr) const throw(error);
+
+/* PRE: V és un vector buit i  ptr apunta a l'arrel de l'AVL.
+POST: Fa un recorregut sorbe l'AVL i posa tots els noms que no són buit a V,
+Comprova que tots els noms dels telèfons siguin diferents i es produeix un error en cas contrari.
+Cost Temporal: O(n), on n es el número de nodes de l'arbre. */
+void dump(vector<phone>& V, node *ptr) const throw(error);
+
+/*Funció per fusionar dos subvectors
+PRE: L[0..n1-1] i R[0..n2-1] són subvectors ordenats de V[esq..dret]
+POST: V[esq..dret] és la fusió ordenada de L i R
+Cost Temporal: O(n), on n és el nombre d'elements en el segment de V[esq..dret]*/
+void merge(vector<phone>& V, int esq, int mig, int dret) const;
+
+/*Funció auxiliar per a l'ordenació per fusió
+mergeSort: Ordena un segment d'un vector utilitzant l'ordenació per fusió
+PRE: esq i dret són els índexs dels extrems del segment de V que es vol ordenar
+POST: El segment V[esq..dret] del vector V està ordenat
+Cost Temporal: O(n log n), on n és el nombre d'elements en el segment de V[esq..dret] */
+void mergeSort(vector<phone>& V, int esq, int dret) const;
+
+/* ordena_per_fusio: Ordena un vector utilitzant l'ordenació per fusió
+PRE: V és un vector de doubles
+POST: El vector V està ordenat de petit a gran
+Cost Temporal: O(n log n), on n és el nombre d'elements en V */
+void ordena_per_fusio(vector<phone>& V) const;

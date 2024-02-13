@@ -1,0 +1,63 @@
+% <comando Unix>
+# <comentario>
+applies_to <op>: devuelve el tipo sobre el que se aplica <op>
+apply <operacion> <filename>: aplica <op> sobre los argumentos en <filename>
+[<call_registry>] as <nat> <string>
+[<call_registry>] assigna_nom <nat> <string>
+[<call_registry>] c <nat>
+[<call_registry>] conte <nat>
+[<call_registry>] dump
+[<call_registry>] e <nat>
+[<call_registry>] elimina <nat>
+[<call_registry>] es_buit
+[<call_registry>] nom_cr <nat>
+[<call_registry>] num_entrades
+[<call_registry>] num_trucades <nat>
+[<call_registry>] r <nat>
+[<call_registry>] registra <nat>
+clear_all: destruye todos los objetos en el sistema
+curr_obj: imprime el nombre del objeto en curso
+dialog <string>
+[<easy_dial>] an
+[<easy_dial>] anterior
+[<easy_dial>] comencen <string>
+[<easy_dial>] ini
+[<easy_dial>] inici
+[<easy_dial>] longitud_mitj
+[<easy_dial>] num_telf
+[<easy_dial>] s <string>
+[<easy_dial>] seguent <string>
+echo_input <on|off>: reproduce o no en el output las instrucciones del input
+echo_output <on|off>: escribe en el output el resultado de las operaciones
+help|? [<op|clase>]: ayuda sobre las operaciones; si se indica 'op' da ayuda sobre una concreta, si se indica 'clase' da ayuda sobre las operaciones aplicables sobre la clase
+help|? [<op|clase>]: ayuda sobre las operaciones; si se indica 'op' da ayuda sobre una concreta, si se indica 'clase' da ayuda sobre las operaciones aplicables sobre la clase
+[<id>] destroy: destruye el objeto <id> o el OC
+[<id1>] = <id2>: copia <id2> sobre el OC o sobre <id1>
+init <id> <class> <arg1> ...
+initcopy <id1> = <id2>: inicializa <id1> con una copia de <id2>
+iter <N> <op> <parametros>: aplica <op> sobre los argumentos N veces>
+known_types: retorna la lista de tipos conocidos
+list_objects [<class>]: lista todos los objetos en el sistema o los de la clase dada
+load <filename>: lee instrucciones desde el fichero indicado
+[<phone>] ++
+[<phone>] != <phone>
+[<phone>] < <phone>
+[<phone>] <= <phone>
+[<phone>] == <phone>
+[<phone>] > <phone>
+[<phone>] >= <phone>
+[<phone>] frec
+[<phone>] frequencia
+[<phone>] nom
+[<phone>] num
+[<phone>] numero
+[<phone>] post_incr
+[<phone>] pre_incr
+print_memory|pm <n>: imprime un informe sobre el estado de memoria dinamica
+print_memory|pm <n>: imprime un informe sobre el estado de memoria dinamica
+sel_curr_obj <id>: selecciona <id> como objeto en curso
+set_memory <max_chunks> <max_bytes>: fija el tama�o de memoria
+start_t: pone en marcha el crono
+stop_t: detiene e imprime el crono
+test_memory [<class>]: pasa tests de memoria din�mica de la clase o de todas las clases
+

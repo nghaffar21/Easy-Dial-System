@@ -1,0 +1,145 @@
+/*Degut a que en aquesta classe hem de buscar paraules lletra per lletra i els métodes havien de tenir un temps constant
+en funció del número de noms emmagatzemats, vam decidir implementar un trie.
+No vam decidir utilitzar la implementació de vector de punters per node degut a que ocupaba massa memória i també perque la 
+majoria d'elements de vectors serien buits, per tant no seria eficient en cost espacial.
+Tampoc vam voler utilitzar un tst degut a que el cost espacial és més gran que la implementació primer-fill següent-germà,
+degut a que cada node guarda tres punters (fill esquerre, fill dret i fill central).
+Per tant, vam decidir implementar el trie utilitzant la estratègia primer-fill següent-germà.
+
+Els phones están guardats en el trie en forma que cuan el punter _actual apunti a cert node dins del trie, aquest node
+tingui guardat el phone favorit F (S, p) que perteneix al prefix p. 
+Els nodes que representen un prefix que no té cap F (S, p), contenen un objecte phone amb atributs buits.
+
+També vam decidir guardar el phone amb més frequència en un objecte auxiliar anomenat _max_phone i no guardarlo en el trie
+degut a que alguns métodes (per exemple inici i nom_telf) demanen el F (S, p) amb p buit, és a dir el phone amb més frequencia de tot el trie.
+Si no fesim això, hauriem de fer un recorregut per el trie per trobar el F (S, p) amb p buit.
+És a dir, guardem el nom del _max_phone com a una clau en el trie, pero no el objecte phone (guardat en el _max_phone).
+
+Nosaltres hem decidit ordenar el trie en ordre alfabetic. Una altra manera d'implementar aquesta classe més eficientment és ordenar els noms (claus) del trie segons 
+les frequencies dels phones. Si puguesim començar de 0, ho haguesim fet d'aquesta manera.*/
+
+
+struct node {
+		char _c;
+		phone _p; //guarda el phone de F (S, p)  del prefix que mostra aquest node
+		node* _pf; // primer fill
+		node* _sg; // següent germà
+		node(const char &c, node* pf = nullptr, node* sg = nullptr); //constructor de node
+};
+
+bool _pvalid; //indica si el _prefix és valid
+
+bool _actual_valid;	//Indica si el punter _actual representa _prefix. Això ens serveix per al métode seguent per a comprovar si no existeix F(S, p) 
+					//(per tant tampoc pot existir F(S, p')).
+					//Necessitem aquesta variable degut a que algunes vegades l'últim caràcter de _prefix no existeix en el trie. En aquest cas el punter _actual no representa 
+					//el _prefix i no és valid
+
+node* _arrel; //apunta a l'arrel del trie
+
+node* _actual; //Representa _prefix en el trie. L'hem utilitzat en els métodes seguent i anterior per apuntar al _prefix dins del trie
+
+string _prefix; //guarda el prefix en curs
+
+int _suma_freqs; //guarda suma de totes les frequencies de tots els phones del trie, l'utilitzem en el métode longitud_mitjana
+
+phone _max_phone; //guarda el phone que te més frequencia de tot (Favorit de prefix ""; aquest phone no es posa en el trie)
+
+
+
+/* PRE: Cert.
+POST: Insereix p com a favorit del node que mostra un prefix.
+Cost Temporal: O(p.nom.length()). */
+void insereix_phone(const phone &p);
+
+
+
+/* PRE: n apunta a l'arrel del trie, i és 0.
+POST: Insereix p com a favorit del node que mostra un prefix.
+Cost Temporal: O(p.nom.length()). */
+void insereix_phone(node* n, string nom, nat i, const phone& p);
+
+
+
+/* PRE: Cert.
+POST: Insereix el nom de p com a clau del trie (respectant l'ordre lexicogràfic del trie).
+Cost Temporal: O(log n) i en el pitjor cas O(n), on n és el número de nodes del trie. */
+void insereix_nom(const phone &p);
+
+
+
+/* PRE: t apunta a l'arrel del trie, i és 0, k ha de tenir phone::ENDPREF com a caràcter final.
+POST: Insereix el string k com a clau del trie (respectant l'ordre lexicogràfic del trie).
+Cost Temporal: O(log n) i en el pitjor cas O(n), on n és el número de nodes del trie. */
+node* insereix_nom(node *t, nat i, const string &k);
+
+
+
+/*ordena_per_fusio: Ordena un vector utilitzant l'ordenació per fusió
+PRE: V és un vector de doubles
+POST: El vector V està ordenat de petit a gran
+Cost Temporal: O(n log n), on n és el nombre d'elements en V */
+void ordena_per_fusio(vector<phone>& V) const;
+
+
+/*Funció auxiliar per a l'ordenació per fusió
+mergeSort: Ordena un segment d'un vector utilitzant l'ordenació per fusió
+PRE: esq i dret són els índexs dels extrems del segment de V que es vol ordenar
+POST: El segment V[esq..dret] del vector V està ordenat
+Cost Temporal: O(n log n), on n és el nombre d'elements en el segment de V[esq..dret] */
+void mergeSort(vector<phone>& V, int esq, int dret) const;
+
+
+/*Funció per fusionar dos subvectors
+PRE: L[0..n1-1] i R[0..n2-1] són subvectors ordenats de V[esq..dret]
+POST: V[esq..dret] és la fusió ordenada de L i R
+Cost Temporal: O(n), on n és el nombre d'elements en el segment de V[esq..dret] */
+void merge(vector<phone>& V, int esq, int mig, int dret) const;
+
+
+
+/*PRE: d apunta a l'arrel del trie que volem copiar.
+POST: copia tot el trie d a l'arrel del paràmetre implícit.
+Cost Temporal: O(n), on n és el número de nodes del trie. */
+node* copiar_arbre(node* d);
+
+
+
+/*PRE: t apunta a l'arrel del trie.
+POST: esborra tots els nodes del trie.
+Cost Temporal: O(n), on n és el número de nodes del trie. */
+void esborra_nodes(node* t);
+
+
+/*PRE: ptr apunta al primer fill de _actual 
+POST: fa un recorregut en fills de _actual fins a trobar c. Retorna un punter que apunta al node que conté 
+aquest caràcter. En cas de que no trobi el caràcter c, retorna un punter null
+Cost temporal: O(l) on l és el número de lletres de l'abecedari */
+node* seguent(node *ptr, char c);
+
+
+/*PRE: n apunta a l'arrel del trie, i = 0.
+POST: fa un recorregut del trie fins trobar el prefix, en cas de que trobi el prefix posa _actual_valid
+a true i retorna un string amb el nom del phone favorit que pertenix a _prefix. Si el _prefix no té cap
+phone favorit associat retorna string buit.
+Cost temporal: O(prefix.length()) */
+string anterior(node *n, nat i);
+
+
+/*PRE: n apunta a l'arrel del trie, i = 0.
+POST: fa un recorregut del trie fins trobar el prefix, retorna false si no troba el prefix
+i true si el troba. Guarda en el punter n la direcció de la primera lletra de prefix en el trie.
+Cost temporal: O(prefix.length()) */
+bool comencen(node*& n, const string& pref, int i) const;
+
+
+/*PRE: ptr apunta al primer fill del últim caràcter del prefix en el trie, nom_tel i result son buits.
+POST: insereix a result tots els noms del trie que comencen per el prefix pref.
+Cost temporal: O(M), on M és el nombre total de caràcters en totes les paraules que comencen amb el prefix.*/
+void comencen(node *ptr, vector<string>& result, const string pref, string nom_tel) const;
+
+
+
+/*PRE: n apunta a l'arrel del trie, long_mitj = 0, num_puls = 1.
+POST: Actualitza la longitud mitjana respecte els objectes phones emmagatzemats en el trie
+Cost Temporal: O(n), on n és el número de nodes del trie. */
+double longitud_mitjana(node *n, double& long_mitj, nat num_puls) const;
