@@ -5,9 +5,9 @@ This code uses an AVL and a Digital Tree(Implemented in the code, without using 
 
 ## Libesin Library
 
-To compile and run the program, you need to download the Libesin library. The instruction for downloading the library are in a file called llegeix-me.txt in the folder 
+* The project can be compiled and run only in a Linux environment.
 
-* The project can be run only in a Linux environment.
+To compile and run the program, you need to first download the Libesin library. The instructions for downloading the library and the necessary files are in the folder ""
 
 In the folder jp_public, there are various test files for testing each class of the program.
 
